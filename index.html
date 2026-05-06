@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Siam Scoops × Gemini — Prompt Library</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Segoe UI',Arial,sans-serif;background:#F8F9FB;color:#1a1a1a}
+:root{
+  --bg:#F8F9FB;--bg2:#FFFFFF;--bg3:#F0F2F5;
+  --border:#E2E6EF;--border2:#C8CFDD;
+  --text:#1A1A2E;--text2:#4A5568;--text3:#8896A8;
+  --blue:#2563EB;--blue-lt:#EBF2FF;
+  --red:#DC2626;--red-lt:#FEF2F2;
+  --green:#059669;
+  --info-bg:#EBF2FF;--info-border:#BFDBFE;--info-text:#1E40AF;
+  --warn-bg:#FFFBEB;--warn-border:#FDE68A;--warn-text:#92400E;
+  --danger-bg:#FEF2F2;--danger-border:#FECACA;--danger-text:#991B1B;
+  --success-bg:#ECFDF5;--success-border:#A7F3D0;--success-text:#065F46;
+}
+.app{background:var(--bg);min-height:100vh}
+.nav{background:#fff;border-bottom:1px solid var(--border);padding:10px 20px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100;box-shadow:0 1px 3px rgba(0,0,0,.06)}
+.nav-brand{display:flex;align-items:center;gap:8px;cursor:pointer}
+.logo{width:30px;height:30px;background:linear-gradient(135deg,#2563eb,#7c3aed);border-radius:8px;display:flex;align-items:center;justify-content:center}
+.logo-i{width:13px;height:13px;border:2.5px solid white;border-radius:3px}
+.nav-t{font-size:13px;font-weight:600;color:var(--text)}
+.nctrl{display:flex;align-items:center;gap:8px}
+.nb{background:#fff;border:1px solid var(--border2);border-radius:8px;padding:5px 11px;font-size:11px;color:var(--text2);cursor:pointer;white-space:nowrap;font-family:inherit}
+.nb:hover{border-color:var(--blue);color:var(--blue)}
+.nb:disabled{opacity:.3;cursor:default;pointer-events:none}
+.nb-nxt{background:var(--blue);color:#fff;border-color:var(--blue)}
+.nb-nxt:hover{background:#1d4ed8;color:#fff;border-color:#1d4ed8}
+.nlbl{font-size:12px;color:var(--text2);max-width:200px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.landing{padding:28px 20px 48px;max-width:960px;margin:0 auto}
+.hbadge{display:inline-block;background:var(--info-bg);color:var(--info-text);font-size:11px;padding:3px 10px;border-radius:999px;margin-bottom:14px;font-weight:600;border:1px solid var(--info-border)}
+.hero h1{font-size:26px;font-weight:700;color:var(--text);margin-bottom:6px}
+.hero p{font-size:13px;color:var(--text2);line-height:1.6;margin-bottom:24px}
+.prob-box{background:var(--danger-bg);border:1px solid var(--danger-border);border-radius:12px;padding:14px 16px;margin-bottom:28px}
+.prob-ttl{font-size:10px;font-weight:700;color:var(--danger-text);text-transform:uppercase;letter-spacing:.08em;margin-bottom:8px}
+.prob-desc{font-size:13px;color:var(--danger-text);line-height:1.6;margin-bottom:10px}
+.pills{display:flex;flex-wrap:wrap;gap:6px}
+.pill{background:#fff;border:1px solid var(--danger-border);border-radius:999px;padding:3px 10px;font-size:11px;color:var(--danger-text);font-weight:500}
+.section{margin-bottom:26px}
+.sechdr{display:flex;align-items:center;gap:10px;margin-bottom:12px}
+.secbar{width:3px;height:16px;border-radius:2px}
+.seclbl{font-size:11px;font-weight:700;color:var(--text2);text-transform:uppercase;letter-spacing:.08em}
+.lgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(155px,1fr));gap:10px}
+.lc{background:#fff;border:1px solid var(--border);border-radius:12px;padding:13px;cursor:pointer;transition:all .15s;position:relative;box-shadow:0 1px 3px rgba(0,0,0,.04)}
+.lc:hover{border-color:var(--blue);box-shadow:0 2px 8px rgba(37,99,235,.12);transform:translateY(-1px)}
+.lc.vis::after{content:'';position:absolute;top:9px;right:9px;width:7px;height:7px;border-radius:50%;background:#22c55e}
+.lc.demo-lab{border:1.5px solid var(--info-border);background:var(--info-bg)}
+.lc.demo-lab:hover{border-color:var(--blue)}
+.lcn{font-size:10px;color:var(--text3);margin-bottom:5px;font-weight:600;text-transform:uppercase;letter-spacing:.04em}
+.lc.demo-lab .lcn{color:var(--info-text)}
+.lct{font-size:13px;font-weight:600;color:var(--text);line-height:1.3;margin-bottom:3px}
+.lcd{font-size:11px;color:var(--text2)}
+.lview{display:none}
+.llayout{display:grid;grid-template-columns:1fr 300px;min-height:560px}
+.lmain{padding:22px 20px;border-right:1px solid var(--border);background:#fff}
+.lhdr{margin-bottom:20px;padding-bottom:16px;border-bottom:1px solid var(--border)}
+.lbadge{display:inline-flex;background:var(--bg3);border:1px solid var(--border);border-radius:999px;padding:3px 10px;font-size:11px;color:var(--text2);margin-bottom:8px;font-weight:500}
+.ltitle{font-size:20px;font-weight:700;color:var(--text);margin-bottom:6px}
+.lobj{font-size:13px;color:var(--text2);line-height:1.6}
+.ptag{display:flex;align-items:flex-start;gap:7px;background:var(--danger-bg);border:1px solid var(--danger-border);border-radius:8px;padding:8px 12px;margin-bottom:18px}
+.ptag-dot{width:6px;height:6px;border-radius:50%;background:var(--danger-text);flex-shrink:0;margin-top:4px}
+.ptag-txt{font-size:12px;color:var(--danger-text);line-height:1.5}
+.demo-box{background:var(--info-bg);border:1px solid var(--info-border);border-radius:8px;padding:12px 14px;margin-bottom:18px}
+.demo-box-lbl{font-size:10px;font-weight:700;color:var(--info-text);text-transform:uppercase;letter-spacing:.08em;margin-bottom:6px}
+.demo-box-txt{font-size:12px;color:var(--info-text);line-height:1.5}
+.fw-row{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:18px}
+.fw-pill{border-radius:8px;padding:8px 12px;display:flex;flex-direction:column;gap:2px;flex:1;min-width:80px}
+.fw-letter{font-size:18px;font-weight:700;line-height:1}
+.fw-word{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.06em}
+.fw-desc{font-size:10px;line-height:1.4;margin-top:2px}
+.sh{font-size:10px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:.08em;margin-bottom:10px}
+.steps{display:flex;flex-direction:column;gap:9px}
+.step{display:flex;gap:11px;padding:11px;background:var(--bg);border-radius:8px;border:1px solid var(--border)}
+.snum{width:22px;height:22px;border-radius:50%;background:#fff;border:1.5px solid var(--border2);font-size:11px;font-weight:700;color:var(--text2);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.stxt{font-size:13px;color:var(--text);line-height:1.5;padding-top:2px}
+.product-card{background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:12px 14px;margin-bottom:14px}
+.product-name{font-size:13px;font-weight:600;color:var(--text);margin-bottom:8px}
+.ing-row{display:flex;gap:6px;flex-wrap:wrap}
+.ing{display:flex;align-items:center;gap:5px;background:#fff;border:1px solid var(--border);border-radius:999px;padding:3px 9px}
+.ing-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0}
+.ing-lbl{font-size:10px;color:var(--text2);font-weight:500}
+.seq-block{background:#fff;border:1px solid var(--border);border-radius:8px;overflow:hidden;margin-bottom:14px}
+.seq-row{display:flex;align-items:flex-start;border-bottom:1px solid var(--border)}
+.seq-row:last-child{border-bottom:none}
+.seq-ts{font-size:10px;font-family:monospace;color:var(--text3);padding:9px 10px;min-width:50px;flex-shrink:0;border-right:1px solid var(--border);background:var(--bg)}
+.seq-dot{width:6px;height:6px;border-radius:50%;flex-shrink:0;margin:10px 8px 0 10px}
+.seq-info{flex:1;padding:9px 10px 9px 0}
+.seq-shot{font-size:11px;font-weight:600;color:var(--text);margin-bottom:2px}
+.seq-cam{font-size:10px;color:var(--text3);font-style:italic}
+.plat-row{display:flex;gap:6px;flex-wrap:wrap;margin-top:12px}
+.plat{background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:6px 10px;flex:1}
+.plat-l{font-size:9px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:.08em;margin-bottom:2px}
+.plat-v{font-size:11px;color:var(--text);font-weight:500}
+.sb{padding:18px 14px;background:var(--bg3);display:flex;flex-direction:column;gap:10px;overflow-y:auto;max-height:calc(100vh - 60px)}
+.sblbl{font-size:10px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:.1em;margin-bottom:2px}
+.upload-box{background:#fff;border:1px solid var(--border2);border-radius:8px;padding:11px}
+.upload-label{font-size:10px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:.1em;margin-bottom:8px}
+.upload-list{display:flex;flex-direction:column;gap:5px}
+.upload-item{display:flex;align-items:center;gap:7px;padding:6px 8px;background:var(--bg3);border-radius:6px;border:1px solid var(--border)}
+.upload-item-dot{width:5px;height:5px;border-radius:50%;background:var(--text3);flex-shrink:0}
+.upload-item-name{font-size:11px;color:var(--text2)}
+.pbox{background:#fff;border:1px solid var(--border);border-radius:8px;padding:11px;box-shadow:0 1px 2px rgba(0,0,0,.04)}
+.pbox-demo{background:var(--info-bg);border:1.5px solid var(--info-border);border-radius:8px;padding:11px}
+.pstep{display:inline-block;font-size:9px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:.1em;background:var(--bg3);border:1px solid var(--border);border-radius:999px;padding:2px 8px;margin-bottom:6px}
+.pstep-demo{background:var(--blue);color:#fff;border-color:var(--blue)}
+.pstep-w{background:var(--warn-bg);border-color:var(--warn-border);color:var(--warn-text)}
+.plbl{font-size:11px;font-weight:600;color:var(--text);margin-bottom:7px;line-height:1.4}
+.ptxt{font-family:monospace;font-size:11px;color:var(--text2);line-height:1.7;white-space:pre-wrap;margin-bottom:9px;background:var(--bg);border-radius:6px;padding:8px;border:1px solid var(--border)}
+.ptxt-demo{font-family:monospace;font-size:13px;font-weight:600;color:var(--info-text);line-height:1.8;white-space:pre-wrap;margin-bottom:9px;background:#fff;border-radius:6px;padding:10px;border:1px solid var(--info-border)}
+.bcopy{width:100%;background:var(--bg3);border:1px solid var(--border2);border-radius:6px;padding:6px;font-size:11px;color:var(--text2);cursor:pointer;font-family:inherit;font-weight:500;transition:all .15s}
+.bcopy:hover{background:var(--blue);color:#fff;border-color:var(--blue)}
+.bcopy.cp{background:#22c55e;color:#fff;border-color:#22c55e}
+.bcopy-demo{width:100%;background:var(--blue);border:none;border-radius:6px;padding:8px;font-size:12px;font-weight:600;color:#fff;cursor:pointer;font-family:inherit;transition:all .15s}
+.bcopy-demo:hover{background:#1d4ed8}
+.bcopy-demo.cp{background:#22c55e}
+.tipbox{background:var(--info-bg);border:1px solid var(--info-border);border-radius:8px;padding:9px 12px}
+.tiplbl{font-size:10px;font-weight:700;color:var(--info-text);text-transform:uppercase;letter-spacing:.08em;margin-bottom:3px}
+.tiptxt{font-size:11px;color:var(--info-text);line-height:1.5}
+.divlbl{font-size:10px;font-weight:700;color:var(--warn-text);text-transform:uppercase;letter-spacing:.1em;background:var(--warn-bg);border:1px solid var(--warn-border);border-radius:6px;padding:5px 10px;text-align:center;margin:2px 0}
+.toast{position:fixed;bottom:20px;right:20px;background:#fff;border:1px solid var(--border2);border-radius:8px;padding:9px 14px;font-size:12px;font-weight:600;color:#22c55e;z-index:999;transform:translateY(80px);transition:transform .2s;pointer-events:none;box-shadow:0 4px 12px rgba(0,0,0,.1)}
+.toast.show{transform:translateY(0)}
+@media(max-width:620px){.llayout{grid-template-columns:1fr}.sb{max-height:none;border-top:1px solid var(--border)}.nlbl{display:none}.lgrid{grid-template-columns:repeat(auto-fill,minmax(130px,1fr))}}
+</style>
+</head>
+<body>
+<div class="app">
+<div class="nav">
+  <div class="nav-brand" onclick="goHome()">
+    <div class="logo"><div class="logo-i"></div></div>
+    <span class="nav-t">Siam Scoops × Gemini</span>
+  </div>
+  <div class="nctrl" id="nc" style="display:none">
+    <button class="nb" id="np" onclick="navL(-1)">← Prev</button>
+    <span class="nlbl" id="nl"></span>
+    <button class="nb nb-nxt" id="nn">Next →</button>
+  </div>
+</div>
+
+<div id="landing" class="landing">
+  <div class="hero">
+    <div class="hbadge">Workshop 1 · Business Use Cases</div>
+    <h1>Siam Scoops — Prompt Library</h1>
+    <p>Prompt templates ทุก Lab มุ่งแก้ปัญหาเดียวกันตลอด — ดอกไม้ไทยขายไม่ดี</p>
+  </div>
+  <div class="prob-box">
+    <div class="prob-ttl">ปัญหาหลักที่ทุก Lab แก้ร่วมกัน</div>
+    <div class="prob-desc">ไอศกรีมกลุ่ม <strong>ดอกไม้ไทย</strong> (มะลิ ดาวเรือง กุหลาบมอญ อัญชัน) ไม่ได้รับความนิยม เมื่อเทียบกับกลุ่มเครื่องเทศและสมุนไพร ทั้งที่วัตถุดิบคุณภาพเท่ากัน</div>
+    <div class="pills">
+      <span class="pill">ยอดขายต่ำกว่ากลุ่มเครื่องเทศ</span>
+      <span class="pill">ลูกค้าไม่คุ้นเคยรสดอกไม้</span>
+      <span class="pill">สื่อสาร value ยังไม่ชัด</span>
+      <span class="pill">ของเสียสูงเพราะขายได้น้อย</span>
+    </div>
+  </div>
+  <div id="cur"></div>
+</div>
+
+<div id="ldetail" class="lview">
+  <div class="llayout">
+    <div class="lmain">
+      <div class="lhdr">
+        <div class="lbadge" id="dbadge"></div>
+        <div class="ltitle" id="dtitle"></div>
+        <div class="lobj" id="dobj"></div>
+      </div>
+      <div id="ddemo" style="display:none"></div>
+      <div id="dfw" style="display:none"><div class="fw-row" id="dfw-pills"></div></div>
+      <div class="ptag"><div class="ptag-dot"></div><div class="ptag-txt" id="dprob"></div></div>
+      <div class="sh">Workflow steps</div>
+      <div class="steps" id="dsteps"></div>
+      <div id="dextra"></div>
+    </div>
+    <div class="sb" id="dsb"></div>
+  </div>
+</div>
+<div class="toast" id="toast">Copied!</div>
+</div>
+
+<script>
+const D=[
+  {grp:"Live Demo",color:"#2563EB",labs:[
+    {id:"l0",num:"Lab 0",title:"Live Demo",tag:"Demo",isDemo:true,desc:"ทดสอบ Gemini ครั้งแรก — ใช้เลย",
+     obj:"สัมผัส Gemini ครั้งแรกด้วย prompt ง่ายๆ ที่เกี่ยวกับธุรกิจของตัวเอง ก่อนเริ่ม Lab จริง",
+     demoNote:"Prompt นี้ใช้ได้เลยทันที — แค่เปลี่ยน [ประเภท] เป็นประเภทธุรกิจของคุณ เช่น ร้านอาหาร โรงแรม คลินิก",
+     prob:"ผู้เข้าอบรมหลายคนยังไม่เคยใช้ Gemini มาก่อน — Lab 0 ช่วยให้คุ้นเคยอินเทอร์เฟซก่อนเริ่ม Lab จริง",
+     steps:["เปิด gemini.google.com บนเบราว์เซอร์","Copy prompt จากแถบขวา แล้ว paste ใน Gemini","เปลี่ยน [ประเภท] เป็นประเภทธุรกิจของคุณ","กด Enter และสังเกตว่า Gemini ตอบอย่างไร"],
+     tip:"ไม่มีคำตอบผิดหรือถูก — Lab 0 มีไว้เพื่อให้คุ้นเคยกับ Gemini ก่อนเริ่ม Lab จริง",
+     prompts:[{step:"Prompt — Copy แล้วใช้เลย",lbl:"สวัสดี ฉันเป็นเจ้าของธุรกิจ [ประเภท] ช่วยแนะนำ 3 วิธีที่ AI จะช่วยธุรกิจฉันได้",isDemo:true,txt:"สวัสดี ฉันเป็นเจ้าของธุรกิจ [ประเภท] ช่วยแนะนำ 3 วิธีที่ AI จะช่วยธุรกิจฉันได้"}]}
+  ]},
+  {grp:"Prompt Engineering",color:"#2563EB",labs:[
+    {id:"l1",num:"Lab 1",title:"4 RTCC Framework",tag:"Foundations",desc:"วิเคราะห์ทำไมดอกไม้ไม่ดัง",
+     obj:"ใช้ Role Task Context Constraint วิเคราะห์สาเหตุที่ดอกไม้ไทยขายไม่ดี",
+     prob:"ดอกไม้ไทยขายไม่ดี ทั้งที่คุณภาพและราคาใกล้เคียงเครื่องเทศและสมุนไพร",
+     steps:["R — Role: กำหนดว่าใครวิเคราะห์เรื่องนี้ได้ดีที่สุด","T — Task: ระบุให้ชัดว่าต้องการคำตอบอะไร","C — Context: ให้ข้อมูลครบทั้ง 3 กลุ่มสินค้า","C — Constraint: ล็อกรูปแบบและขนาดของคำตอบ"],
+     tip:"ยิ่ง Constraint ชัด output ยิ่งนำไปใช้ได้ทันที",
+     prompts:[{step:"Prompt เดียว",lbl:"RTCC · วิเคราะห์ทำไมดอกไม้ไทยขายไม่ดี",txt:"Role: Senior Brand Strategist ผู้เชี่ยวชาญ F&B ตลาดไทย\n\nTask: วิเคราะห์ว่าทำไมไอศกรีมกลุ่มดอกไม้ไทย (มะลิ ดาวเรือง กุหลาบมอญ อัญชัน) ของ Siam Scoops ถึงขายได้น้อยกว่ากลุ่มเครื่องเทศ (กานพลู อบเชย) และกลุ่มสมุนไพร (ขิง ตะไคร้ ใบเตย)\n\nContext: Siam Scoops โรงงานไอศกรีม artisan 40 ปี ใช้วัตถุดิบธรรมชาติ 100% ทุกกลุ่มสินค้าคุณภาพเท่ากัน ราคาใกล้เคียงกัน\n\nConstraint: ตอบเป็น bullet points ไม่เกิน 200 คำ ระบุสาเหตุ 3 ข้อ พร้อม action item ที่ทำได้ภายใน 30 วัน 3 ข้อ"}]},
+    {id:"l21",num:"Lab 2.1",title:"PTFC Framework",tag:"Foundations",desc:"Google Framework — Persona Task Format Context",
+     obj:"ใช้ PTFC Framework ของ Google สร้าง prompt ที่กำหนด persona ชัด ระบุ format ของ output และให้ context ครบ",
+     prob:"ดอกไม้ไทยขายไม่ดี — ต้องการ output ที่มีรูปแบบชัดเจน นำไปใช้ได้ทันที",
+     fw:[{letter:"P",word:"Persona",desc:"กำหนดบทบาทของ AI",bg:"#EBF2FF",color:"#1E40AF"},{letter:"T",word:"Task",desc:"ระบุงานที่ต้องการ",bg:"#ECFDF5",color:"#065F46"},{letter:"F",word:"Format",desc:"ระบุรูปแบบ output",bg:"#FFFBEB",color:"#92400E"},{letter:"C",word:"Context",desc:"ให้ข้อมูลพื้นฐาน",bg:"#FEF2F2",color:"#991B1B"}],
+     steps:["P — Persona: ระบุว่า AI ควรรับบทบาทเป็นผู้เชี่ยวชาญด้านใด","T — Task: ระบุงานที่ต้องการ ให้ชัดและวัดผลได้","F — Format: กำหนดรูปแบบ output ล่วงหน้า","C — Context: ให้ข้อมูลพื้นฐานที่จำเป็น"],
+     tip:"PTFC ต่างจาก RTCC ตรง Format — กำหนด format ล่วงหน้าทำให้ไม่ต้องแก้ output ภายหลัง",
+     prompts:[{step:"Prompt เดียว",lbl:"PTFC · วิเคราะห์และแนะนำกลยุทธ์ดอกไม้ไทย",txt:"Persona: คุณคือ CMO ที่มีประสบการณ์ด้าน F&B artisan branding ในตลาดไทยมากกว่า 15 ปี\n\nTask: วิเคราะห์ว่าทำไมไอศกรีมกลุ่มดอกไม้ไทย ของ Siam Scoops ขายได้น้อยกว่ากลุ่มเครื่องเทศและสมุนไพร และแนะนำกลยุทธ์ภายใน 90 วัน\n\nFormat: ตอบใน 3 ส่วน:\nส่วนที่ 1 — ตารางวิเคราะห์สาเหตุ (สาเหตุ | ผลกระทบ) 3 แถว\nส่วนที่ 2 — กลยุทธ์หลัก 3 ข้อ (ชื่อ / วิธีทำ / KPI)\nส่วนที่ 3 — Timeline: Month 1 / Month 2 / Month 3\n\nContext: Siam Scoops artisan 40 ปี วัตถุดิบธรรมชาติ 100% งบการตลาดไม่เกิน 50,000 บาท/เดือน"}]},
+    {id:"l22",num:"Lab 2.2",title:"TCREI Framework",tag:"Foundations",desc:"เขียน copy ดอกไม้ไทยแบบมีกระบวนการ",
+     obj:"ใช้ TCR สร้าง product copy ก่อน แล้วค่อย Evaluate และ Iterate เพื่อให้ copy ดีขึ้นจริง",
+     prob:"Copy ที่มีอยู่ไม่ได้ช่วยให้ลูกค้าเข้าใจดอกไม้ไทย",
+     steps:["T — Task: กำหนดว่าต้องการ copy แบบไหน","C — Context: ระบุ barrier หลักของลูกค้า","R — References: ให้ตัวอย่าง copy ดีและไม่ดี","— ส่ง prompt รับผลลัพธ์ก่อน —","E — Evaluate: ตรวจสอบว่า copy แก้ barrier ได้จริงไหม","I — Iterate: แก้ไขและ generate ใหม่"],
+     tip:"TCREI ไม่ใช่ prompt เดียวจบ — TCR คือการสร้าง, EI คือการแก้ไข",
+     prompts:[
+       {step:"ช่วงที่ 1 — ส่ง TCR ก่อน",lbl:"T·C·R · สร้าง copy ดอกไม้ไทยครั้งแรก",txt:"Task: เขียน product description ของไอศกรีมมะลิ Siam Scoops ให้ลูกค้าที่ไม่เคยกินรสดอกไม้อยากลอง 2-3 ประโยค\n\nContext: ลูกค้าคุ้นเคยกับขิง ตะไคร้ ใบเตย แต่นึกภาพ 'ไอศกรีมมะลิ' ไม่ออก\n\nReferences:\n- copy ดี: 'หอมมะลิสดๆ ที่คุณรู้จัก — ตอนนี้อยู่ในรูปแบบเย็น ชื่นใจ ละลายในปาก'\n- copy ไม่ดี: 'ไอศกรีมมะลิ ทำจากดอกมะลิ หอม อร่อย มีประโยชน์'"},
+       {step:"ช่วงที่ 2 — หลังได้ผลแล้ว",isDivider:true,lbl:"E · ประเมิน copy ที่ได้",txt:"ประเมิน copy ที่เพิ่งสร้างโดยตอบ:\n1. ลูกค้าที่ไม่รู้จักรสมะลิ อ่านแล้วนึกภาพออกไหม?\n2. copy แก้ barrier 'ไม่รู้จักรสดอกไม้' ได้จริงหรือยัง?\n3. มีจุดไหนที่ยังฟังดูทั่วไป?\nสรุป: ผ่านหรือต้องปรับ"},
+       {step:"ช่วงที่ 2 — หลัง Evaluate แล้ว",lbl:"I · Iterate — เขียนใหม่",txt:"จากการประเมิน ให้เขียน copy ใหม่สำหรับไอศกรีมมะลิโดยแก้ทุกจุดที่ระบุ และบอกว่า version ใหม่ต่างจาก version แรกอย่างไร"}
+     ]}
+  ]},
+  {grp:"Advanced Prompt Techniques",color:"#7C3AED",labs:[
+    {id:"l31",num:"Lab 3.1",title:"Chain of Thought",tag:"Advanced",desc:"หา root cause จริงว่าดอกไม้ไม่ดัง",
+     obj:"ให้ Gemini reasoning ทีละขั้นเพื่อหาสาเหตุที่แท้จริงว่าดอกไม้ไทยขายไม่ดี",
+     prob:"อาจมีสาเหตุซ้อนกันหลายชั้น — ต้องการ reasoning ลึกกว่า bullet points",
+     steps:["ระบุปัญหาให้ครบทุกมิติ","เพิ่มคำสั่ง 'คิดทีละขั้นตอน'","ให้แสดง hypothesis แต่ละข้อ","สรุป root cause จริง"],
+     tip:"CoT ดีมากเมื่อปัญหามีหลายชั้น",
+     prompts:[{step:"Prompt เดียว",lbl:"CoT · หา root cause ว่าดอกไม้ไม่ดัง",txt:"Siam Scoops มีปัญหา: ไอศกรีมกลุ่มดอกไม้ไทย ขายได้น้อยกว่ากลุ่มเครื่องเทศและสมุนไพร ทั้งที่คุณภาพและราคาเท่ากัน\n\nกรุณาคิดทีละขั้นตอน:\n1. ตั้ง hypothesis สาเหตุที่เป็นไปได้ทั้งหมด (อย่างน้อย 5 ข้อ)\n2. วิเคราะห์แต่ละ hypothesis\n3. ระบุว่า hypothesis ใดเป็น root cause จริง\n4. สรุป 1-2 root cause หลัก และอธิบายว่าถ้าแก้จะเปลี่ยนยอดขายได้อย่างไร"}]},
+    {id:"l32",num:"Lab 3.2",title:"Tree of Thoughts",tag:"Advanced",desc:"3 ผู้เชี่ยวชาญหากลยุทธ์ฟื้นดอกไม้",
+     obj:"ให้ 3 ผู้เชี่ยวชาญมองปัญหาดอกไม้ไทยจากมุมต่างกัน แล้ว synthesize เป็นกลยุทธ์จริง",
+     prob:"ต้องการ strategy รอบด้าน — การตลาด, retail, และ psychology ต้องสอดคล้องกัน",
+     steps:["Expert 1: นักการตลาด — positioning","Expert 2: Retail Specialist — packaging","Expert 3: นักจิตวิทยาผู้บริโภค — barrier","ให้ debate แล้วสรุปแผน 3 เดือน"],
+     tip:"ToT ช่วยเปิดมุมที่คิดเองไม่ถึง",
+     prompts:[{step:"Prompt เดียว",lbl:"ToT · 3 ผู้เชี่ยวชาญวางกลยุทธ์ฟื้นดอกไม้",txt:"Siam Scoops ต้องการฟื้นยอดขายไอศกรีมกลุ่มดอกไม้ไทย\n\nให้ผู้เชี่ยวชาญ 3 คนวิเคราะห์:\nExpert 1 (นักการตลาด F&B): brand positioning และ storytelling\nExpert 2 (Retail & Packaging): packaging และ product placement\nExpert 3 (นักจิตวิทยาผู้บริโภค): consumer psychology และ barrier\n\nให้ทั้ง 3 คน debate แล้วสรุปเป็น 1 กลยุทธ์ที่ดีที่สุด พร้อมแผน 3 เดือน"}]},
+    {id:"l33",num:"Lab 3.3",title:"Self-Correction",tag:"Advanced",desc:"ตรวจแคมเปญดอกไม้ก่อนใช้จริง",
+     obj:"ให้ Gemini เขียนแคมเปญฟื้นยอดดอกไม้ไทย แล้วตรวจจุดอ่อนเองก่อนส่งให้ทีม",
+     prob:"แคมเปญที่ไม่ได้ตรวจสอบอาจยิ่งทำให้ลูกค้าสับสน",
+     steps:["ขอ Gemini เขียนแคมเปญก่อน","ให้ AI วิจารณ์จุดอ่อน","ให้ AI แก้ไขตามจุดอ่อน"],
+     tip:"Self-correction ดีมากกับงาน communication",
+     prompts:[
+       {step:"Step 1",lbl:"เขียนแคมเปญพลิกยอดขายดอกไม้ไทย",txt:"เขียนแคมเปญการตลาด 60 วันสำหรับ Siam Scoops เพิ่มยอดขายไอศกรีมดอกไม้ไทย\nโจทย์: ลูกค้าไม่ซื้อเพราะไม่รู้จักรสชาติ\nแคมเปญต้องมี: ชื่อ + tagline / กลยุทธ์ 3 ข้อ / ช่องทาง · ไม่เกิน 200 คำ"},
+       {step:"Step 2",isDivider:true,lbl:"ให้ AI วิจารณ์จุดอ่อน",txt:"ทบทวนแคมเปญที่เพิ่งเขียน และระบุจุดอ่อนอย่างน้อย 3 ข้อ"},
+       {step:"Step 3",lbl:"เขียนเวอร์ชันที่แก้ไขแล้ว",txt:"เขียนแคมเปญเวอร์ชันใหม่ที่แก้ไขจุดอ่อนทุกข้อ และระบุว่า version ใหม่ต่างจาก version แรกอย่างไร"}
+     ]},
+    {id:"l34",num:"Lab 3.4",title:"Chain of Density",tag:"Advanced",desc:"บีบ story ดอกไม้ให้เข้มข้น",
+     obj:"สร้าง brand story ดอกไม้ไทยที่เข้มข้นและ convincing ในพื้นที่ 100 คำ",
+     prob:"ยังไม่มี story สั้นๆ ที่ทำให้ลูกค้าเข้าใจดอกไม้ไทย",
+     steps:["เขียน brand story 100 คำ เวอร์ชันแรก","ระบุ 5 fact ที่ขาดหายไป","เขียนใหม่ความยาวเท่าเดิม","ทำซ้ำ 3-5 รอบ"],
+     tip:"CoD เหมาะมากกับ packaging copy",
+     prompts:[
+       {step:"Step 1",lbl:"เขียน brand story ดอกไม้ไทย 100 คำ",txt:"เขียน brand story ของ Siam Scoops ที่เน้นกลุ่มไอศกรีมดอกไม้ไทย ความยาวพอดี 100 คำ\nเป้าหมาย: ลูกค้าที่ไม่เคยลองอ่านแล้วอยากลอง\nBrand voice: อบอุ่น ภูมิใจใน heritage"},
+       {step:"Step 2",isDivider:true,lbl:"หา 5 fact ที่ขาด แล้วเขียนใหม่ 100 คำ",txt:"ระบุ 5 ข้อมูลของดอกไม้ไทยที่ขาดหายไปจาก story ข้างต้น แล้วเขียน story ใหม่ความยาวพอดี 100 คำ"},
+       {step:"Step 3-5",lbl:"ทำซ้ำอีก 3 รอบจนสมบูรณ์",txt:"ทำซ้ำขั้นตอนเดิมอีก 3 รอบ แสดงทุก version เรียงกัน"}
+     ]}
+  ]},
+  {grp:"Reasoning & Research",color:"#059669",labs:[
+    {id:"l41",num:"Lab 4.1",title:"Deep Research",tag:"Research",desc:"ค้น trend ดอกไม้ไทยใน F&B โลก",
+     obj:"ใช้ Search Grounding หาหลักฐานว่า floral flavours กำลัง trend พร้อม citation",
+     prob:"ขาดข้อมูลตลาดที่จะยืนยันว่าดอกไม้ไทยมีโอกาส",
+     steps:["เปิด Search grounding ใน Gemini Advanced","ถาม trend floral flavours ระดับโลก","ขอ citation ทุก claim","นำข้อมูลมาเชื่อม positioning Siam Scoops"],
+     tip:"ขอ citation ทุกครั้ง — ข้อมูลไม่มี source ใช้ justify investment ไม่ได้",
+     prompts:[{step:"Prompt เดียว",lbl:"Research · trend floral flavours",txt:"Research หัวข้อต่อไปนี้พร้อม citation:\n1. Trend ของ floral flavours ใน ice cream และ F&B ทั่วโลกปี 2024-2025\n2. Brand ที่ประสบความสำเร็จกับ floral ice cream — communicate รสชาติอย่างไร\n3. Barrier หลักของผู้บริโภคไทยต่อรสชาติใหม่ที่ไม่คุ้น\n4. วิธี educate ผู้บริโภคให้ลองรสชาติที่ไม่คุ้น\n\nระบุ URL และชื่อแหล่งที่มาหลังทุก claim"}]},
+    {id:"l42",num:"Lab 4.2",title:"Thinking Mode",tag:"Research",desc:"ตัดสินใจ: ฟื้นดอกไม้ หรือโฟกัสสิ่งที่ขายดี",
+     obj:"ใช้ Thinking Mode วิเคราะห์การตัดสินใจที่มี trade-off หลายมิติ",
+     prob:"การตัดสินใจนี้กระทบ brand identity, revenue, และ resource",
+     steps:["เลือก Gemini 2.0 Flash Thinking","ตั้งคำถาม decision-making ที่มี trade-off","สังเกต reasoning trace","เปรียบเทียบกับ mode ปกติ"],
+     tip:"Thinking Mode เหมาะกับ decision ที่ถ้าผิดมีผลระยะยาว",
+     prompts:[{step:"Prompt เดียว",lbl:"Thinking · ฟื้นดอกไม้ หรือโฟกัสกลุ่มที่ขายดี",txt:"Siam Scoops กำลังเผชิญการตัดสินใจสำคัญ:\n\nสถานการณ์:\n- มะลิ ดาวเรือง กุหลาบมอญ อัญชัน ขายน้อยกว่ากลุ่มเครื่องเทศอย่างต่อเนื่อง\n- ดอกไม้ไทยเป็นส่วนสำคัญของ brand identity\n- ลูกค้าที่เคยลองบอกว่า 'ดีกว่าที่คิด' แต่ซื้อซ้ำน้อย\n\nตัวเลือก:\nA) ลงทุนพลิกกลุ่มดอกไม้\nB) ค่อยๆ ลดกลุ่มดอกไม้\nC) เก็บดอกไม้ไว้เฉพาะ seasonal\n\nวิเคราะห์อย่างละเอียด ชั่งน้ำหนัก trade-off และแนะนำตัวเลือกที่ดีที่สุด"}]}
+  ]},
+  {grp:"Agentic & Multimodal",color:"#0891B2",labs:[
+    {id:"l51",num:"Lab 5.1",title:"Video/Audio Analysis",tag:"Multimodal",desc:"วิเคราะห์เว็บไซต์คู่แข่ง floral dessert",
+     obj:"ใช้ Gemini วิเคราะห์เว็บไซต์คู่แข่งที่ขาย floral dessert ได้ผล",
+     prob:"Siam Scoops ไม่รู้ว่าคู่แข่งที่ขายดอกไม้ไทยได้ผลทำ messaging ยังไง",
+     steps:["หา URL เว็บไซต์แบรนด์ที่ขาย floral dessert ได้ผล","Paste URL เข้า Gemini พร้อม prompt","ให้ Gemini วิเคราะห์ messaging","นำ insight มาเปรียบเทียบกับ Siam Scoops"],
+     tip:"Gemini อ่านเว็บไซต์ได้โดยตรงเมื่อ paste URL",
+     prompts:[{step:"Prompt เดียว",lbl:"วิเคราะห์เว็บไซต์คู่แข่ง floral dessert",txt:"[วาง URL เว็บไซต์แบรนด์ที่ขาย floral dessert ได้ผล]\n\nวิเคราะห์เว็บไซต์นี้และตอบโดยเปรียบเทียบกับ Siam Scoops:\n1. แบรนด์นี้ใช้ headline และ messaging อะไร?\n2. พวกเขา educate ลูกค้าที่ไม่คุ้นรสดอกไม้อย่างไร?\n3. Pricing และ positioning เป็นอย่างไร?\n4. สรุป 3 สิ่งที่ Siam Scoops ควรนำมาปรับใช้"}]},
+    {id:"l52",num:"Lab 5.2",title:"Long Context Window",tag:"Multimodal",desc:"วิเคราะห์ข้อมูลดอกไม้ไทยทั้งปีพร้อมกัน",
+     obj:"Upload ยอดขายและ feedback ครบปี เพื่อหา pattern",
+     prob:"ข้อมูลกระจายหลายไฟล์ ทำให้มองไม่เห็น pattern",
+     steps:["Upload ไฟล์ยอดขายและ feedback ทั้งปีพร้อมกัน","ถามเฉพาะกลุ่มดอกไม้ไทย cross-document","ขอระบุ segment หรือช่วงเวลาที่ดอกไม้ขายดี","ขอ actionable insight"],
+     tip:"ถามคำถามที่ต้องอ่านหลายไฟล์พร้อมกัน",
+     hasUpload:true,uploadLabel:"ไฟล์ที่ต้อง Upload เข้า Gemini",
+     uploadFiles:["รายงานยอดขายรายเดือน (12 ไฟล์)","Customer feedback รายเดือน (12 ไฟล์)"],
+     prompts:[{step:"Prompt เดียว",lbl:"วิเคราะห์ pattern ดอกไม้ไทยจากข้อมูล 12 เดือน",txt:"วิเคราะห์เฉพาะกลุ่มไอศกรีมดอกไม้ไทย ข้ามทุกเอกสาร และตอบ:\n1. มีเดือนหรือช่วงใดที่ดอกไม้ไทยขายดีกว่าปกติ?\n2. Customer segment ใดที่มี repeat purchase มากที่สุด?\n3. Feedback ของคนที่ซื้อดอกไม้ต่างจากคนที่ไม่ซื้ออย่างไร?\n4. มีสัญญาณใดที่บ่งว่าดอกไม้จะขายดีขึ้นได้?\n5. แนะนำ quick win 2-3 ข้อที่ทำได้ภายใน 1 เดือน"}]}
+  ]},
+  {grp:"Creative & Customisation",color:"#DC2626",labs:[
+    {id:"l61",num:"Lab 6.1",title:"Canvas Mode",tag:"Tools",desc:"เขียนแผนฟื้นดอกไม้ไทยใน Canvas",
+     obj:"ใช้ Canvas ร่างและแก้ไขแผน 3 เดือนฟื้นยอดขายดอกไม้ไทย",
+     prob:"ทีมยังไม่มีแผนชัดเจนที่ทุกคนเห็นภาพตรงกัน",
+     steps:["เปิด Canvas ใน Gemini","ขอ AI draft แผน 3 เดือน","แก้ไข section ที่ไม่ practical","ขอ AI เสนอ alternative wording"],
+     tip:"Canvas ดีที่สุดสำหรับงานที่ต้องการ iteration",
+     prompts:[{step:"Prompt เดียว",lbl:"Canvas · แผน 3 เดือนฟื้นยอดขายดอกไม้ไทย",txt:"เขียนแผนการตลาด 3 เดือนสำหรับ Siam Scoops เพื่อแก้ปัญหาไอศกรีมดอกไม้ไทยขายไม่ดี เปิดใน Canvas\n\n1. สถานการณ์ปัจจุบัน — 3 ประโยค\n2. เป้าหมาย 3 เดือน — KPI ชัดเจน\n3. กลยุทธ์หลัก 3 ข้อ\n4. Timeline — Month 1 ละเอียด, Month 2-3 ภาพรวม\n5. Budget estimate"}]},
+    {id:"l62",num:"Lab 6.2",title:"Gems (Custom AI)",tag:"Tools",desc:"Gem ผู้เชี่ยวชาญปัญหาดอกไม้ไทย",
+     obj:"สร้าง Gem ที่รู้บริบทปัญหาดอกไม้ไทยครบ ตอบคำถามได้ทันที",
+     prob:"ทีมต้องการ AI ที่รู้บริบทปัญหาดอกไม้ไทยครบ",
+     steps:["เปิด Gems ใน Gemini Advanced","เขียน system instruction ครบ","Test ด้วยคำถามจริง","Save และ share กับทีม"],
+     tip:"ระบุทั้ง 'ให้ทำ' และ 'ห้ามทำ' ให้ชัด",
+     prompts:[{step:"Prompt เดียว",lbl:"System Instruction · Gem ผู้เชี่ยวชาญดอกไม้ไทย",txt:'[System Instruction สำหรับ Gem "Siam Scoops — Floral Specialist"]\n\nคุณคือผู้เชี่ยวชาญด้านการตลาดสำหรับ Siam Scoops โดยเฉพาะกลุ่มไอศกรีมดอกไม้ไทย\nบริบท: artisan 40 ปี วัตถุดิบธรรมชาติ 100%\nปัญหา: มะลิ ดาวเรือง กุหลาบมอญ อัญชัน ขายไม่ดี เพราะลูกค้าไม่คุ้นเคยรสชาติ\nBrand voice: อบอุ่น เชื่อถือได้ ภูมิใจใน heritage\n\nเมื่อถูกถาม: เน้น solution ที่แก้ "barrier การไม่รู้จักรสดอกไม้"\nห้าม: แนะนำสารสังเคราะห์ / เสนองบเกิน 50,000 บาทโดยไม่ถาม'}]},
+    {id:"l63",num:"Lab 6.3",title:"Guided Learning",tag:"Tools",desc:"เรียน AI ด้วยปัญหาดอกไม้เป็น case study",
+     obj:"ให้ Gemini สร้าง learning plan ที่ใช้ปัญหาดอกไม้ไทยเป็น case study จริง",
+     prob:"ถ้าเรียน AI แบบ generic ทีมจะไม่รู้ว่าจะ apply อย่างไร",
+     steps:["ระบุ role และ use case ที่เชื่อมกับปัญหา","ขอ roadmap ที่ใช้ดอกไม้ไทยเป็น case study","ขอ quiz จากงานจริง","ขอ AI ปรับตาม progress"],
+     tip:"Learning plan ที่ใช้ปัญหาจริงเป็น case study ดีกว่าตัวอย่างสมมุติ",
+     prompts:[{step:"Prompt เดียว",lbl:"Curriculum AI เพื่อแก้ปัญหาดอกไม้ไทย",txt:"สร้าง AI learning plan 4 สัปดาห์สำหรับทีม Siam Scoops\nใช้ปัญหา 'ดอกไม้ไทยขายไม่ดี' เป็น case study ตลอดหลักสูตร\n\nทีม: การตลาด / ขาย / เจ้าของ\nทุก exercise ใช้โจทย์ดอกไม้ไทยจริง\nWeek 1-2: Prompt engineering / Week 3: Advanced / Week 4: ทดลองจริง\nQuiz วัดจากงานจริง"}]}
+  ]},
+  {grp:"Media Generation",color:"#DB2777",labs:[
+    {id:"l71",num:"Lab 7.1",title:"Create Photo",tag:"Creative",desc:"ภาพที่ทำให้ดอกไม้ไทยน่าลอง",
+     obj:"ใช้ Imagen 3 สร้างภาพที่ช่วยให้ลูกค้า 'นึกภาพรสชาติออก'",
+     prob:"ภาพสินค้าปัจจุบันไม่ได้ช่วยให้ลูกค้านึกภาพรสดอกไม้ไทยออก",
+     steps:["กำหนดว่าภาพต้องทำให้ 'นึกภาพรสชาติออก'","ระบุ visual cue ที่เชื่อมกับกลิ่นและรส","ใส่ props ที่บอก story ดอกไม้ไทย","ทดสอบ: เดารสชาติได้โดยไม่ต้องอ่าน label"],
+     tip:"ภาพที่ดีต้องทำให้คนเดารสชาติได้โดยไม่ต้องอ่าน label",
+     prompts:[{step:"Prompt เดียว",lbl:"Imagen 3 · ภาพที่ทำให้นึกภาพรสมะลิออก",txt:"สร้างภาพ product photography ของไอศกรีมมะลิ Siam Scoops ที่ช่วยให้ลูกค้านึกภาพรสชาติออกโดยไม่ต้องอ่าน label\n\nVisual cues: ดอกมะลิสด 3-5 ดอกวางรอบไอศกรีม / กลีบโรยหน้า / ไอน้ำเบาๆ\nสินค้า: ไอศกรีมมะลิสีขาวครีม ในถ้วยเซรามิกเก่า\nProps: ผ้าลินิน ไม้สักเก่า\nแสง: natural light อ่อนจากซ้าย\nสไตล์: Thai artisan editorial, 8K sharp focus"}]},
+    {id:"l72",num:"Lab 7.2",title:"Create Music",tag:"Creative",desc:"BGM ที่ทำให้รู้สึกถึงดอกไม้ไทย",
+     obj:"สร้างดนตรีที่ช่วยให้ลูกค้า 'รู้สึกถึงกลิ่น' ของดอกไม้ไทยก่อนได้ชิม",
+     prob:"brand video ดอกไม้ไทยใช้ BGM ทั่วไปที่ไม่ได้สร้าง emotional connection",
+     steps:["กำหนด mood ที่สะท้อนความ delicate ของดอกไม้","เลือก instrument ที่เหมาะสม","ระบุ BPM ที่ช้าพอ","ออกแบบ structure"],
+     tip:"ดนตรีที่ดีทำให้คนรู้สึกถึง 'กลิ่น' ได้",
+     prompts:[{step:"Prompt เดียว",lbl:"BGM ที่ทำให้รู้สึกถึงกลิ่นดอกไม้ไทย",txt:"สร้างดนตรีพื้นหลังสำหรับ brand video ไอศกรีมดอกไม้ไทย Siam Scoops ความยาว 60 วินาที\n\nGenre: Thai Floral Minimal\nInstruments: ขลุ่ยไทยเสียงสูง + Harp + Wind chimes\nBPM: 60-65 · Mood: บริสุทธิ์ หอม เปราะบาง\nAvoid: กลองแรง เครื่องดนตรีไฟฟ้า\nStructure: intro 15 วิ → full band 35 วิ → fade out 10 วิ"}]},
+    {id:"l73",num:"Lab 7.3",title:"Create Video",tag:"Creative",desc:"Video เปิดตัว Triple Floral Coconut",
+     obj:"ใช้ Gemini Veo สร้างวิดีโอ 30 วินาทีสำหรับ Instagram Reels",
+     prob:"Triple Floral Coconut ใช้กะทิเป็น familiar hook",
+     steps:["เปิด Veo ใน Gemini Advanced","ใช้ Prompt 1 วาง shot plan","อนุมัติแล้ว generate ด้วย Prompt 2"],
+     tip:"ถ้า Veo ยังไม่พร้อม ใช้ Google VideoFX หรือ Runway ML แทนได้",
+     isVideoLab:true,
+     prompts:[
+       {step:"Prompt 1 — วาง shot plan",lbl:"ให้ Gemini ช่วยวาง shot plan",txt:"ฉันกำลังสร้าง Instagram Reels 30 วินาที เพื่อประกาศเปิดตัว 'Triple Floral Coconut'\nไอศกรีมกะทิ + กลิ่นมะลิ + กุหลาบมอญ + ดาวเรือง\nเป้าหมาย: ทำให้คนที่ไม่เคยลองรสดอกไม้อยากลอง โดยใช้กะทิเป็น 'familiar hook'\nช่วยวาง shot sequence 5-6 shot พร้อม shot description / camera / emotion\nFormat: 9:16 vertical · Mood: artisan Thai heritage อบอุ่น"},
+       {step:"Prompt 2 — Generate วิดีโอ",isDivider:true,lbl:"สร้างวิดีโอ Triple Floral Coconut 30 วินาที",txt:"สร้างวิดีโอ Instagram Reels 30 วินาที 'Triple Floral Coconut' Siam Scoops\nFormat: 9:16 vertical · cinematic 24fps\n\nShot sequence:\n00:00-00:05 — overhead กะทิสดถูกผ่า น้ำกะทิไหลลงกะทะ slow motion\n00:05-00:10 — macro ดอกมะลิตกลงในนมกะทิช้าๆ\n00:10-00:16 — มือพับกลีบกุหลาบมอญลงในส่วนผสม\n00:16-00:21 — overhead กลีบดาวเรืองโรยบนไอศกรีม slow motion\n00:21-00:28 — slow dolly-in เข้าหาถ้วยบนโต๊ะไม้สักเก่า fade in 'Triple Floral Coconut · Siam Scoops'\n00:28-00:30 — fade to white พร้อม logo\n\nColor: warm golden · Mood: artisan handcrafted"}
+     ]}
+  ]},
+  {grp:"Integration",color:"#D97706",labs:[
+    {id:"l81",num:"Lab 8.1",title:"Gemini in Chrome",tag:"Integration",desc:"วิเคราะห์เว็บไซต์คู่แข่งด้วย Chrome Extension",
+     obj:"ใช้ Gemini in Chrome Extension วิเคราะห์เว็บไซต์คู่แข่งแบบ real-time",
+     prob:"Siam Scoops ต้องการรู้ว่าคู่แข่งที่ขายดอกไม้ไทยได้ผลทำ messaging ยังไง",
+     steps:["ติดตั้ง Gemini in Chrome Extension","เปิดเว็บไซต์คู่แข่ง floral dessert","คลิก Gemini icon เปิด sidebar","ถาม Gemini วิเคราะห์เว็บที่กำลังเปิดอยู่"],
+     tip:"Gemini in Chrome วิเคราะห์หน้าเว็บที่กำลังดูอยู่ได้โดยตรง",
+     prompts:[{step:"Prompt เดียว",lbl:"วิเคราะห์เว็บไซต์คู่แข่งที่กำลังเปิดอยู่",txt:"[เปิดเว็บไซต์แบรนด์ floral dessert แล้วถาม Gemini ใน sidebar:]\n\nวิเคราะห์เว็บไซต์นี้และตอบโดยเปรียบเทียบกับ Siam Scoops:\n1. แบรนด์นี้ใช้ headline และ messaging อะไร?\n2. พวกเขา educate ลูกค้าที่ไม่คุ้นรสดอกไม้อย่างไร?\n3. Pricing และ positioning เป็นอย่างไร?\n4. สรุป 3 สิ่งที่ Siam Scoops ควรนำมาปรับใช้"}]},
+    {id:"l82",num:"Lab 8.2",title:"NotebookLM",tag:"Integration",desc:"Knowledge base ปัญหาดอกไม้ไทยครบในที่เดียว",
+     obj:"รวมข้อมูลยอดขาย feedback คู่แข่ง และ brand guideline ไว้ใน Notebook เดียว",
+     prob:"ข้อมูลเกี่ยวกับปัญหาดอกไม้ไทยกระจายอยู่ทุกที่",
+     steps:["สร้าง notebook ที่ notebooklm.google.com","Upload เอกสาร 5 ไฟล์","ถามคำถาม synthesis ข้ามเอกสาร","สร้าง Audio Overview สำหรับ brief ทีม"],
+     tip:"NotebookLM ไม่ hallucinate จาก internet",
+     hasUpload:true,uploadLabel:"เอกสารที่ต้อง Upload เข้า NotebookLM",
+     uploadFiles:["รายงานยอดขาย Q1 2025","Customer feedback รายเดือน","สูตรมาตรฐานและ Shelf-life","วิเคราะห์คู่แข่ง floral ice cream","Brand Guideline Siam Scoops"],
+     prompts:[{step:"Prompt เดียว",lbl:"วิเคราะห์ปัญหาดอกไม้ไทยจากทุกเอกสาร",txt:"คำถามที่ต้องการคำตอบจากข้อมูลของเราเอง:\n1. อะไรคือสาเหตุหลักว่าทำไมดอกไม้ไทยขายไม่ดี?\n2. มีช่วงเวลาหรือ segment ใดที่ดอกไม้ขายดีกว่าปกติ?\n3. Feedback ลูกค้าที่ซื้อดอกไม้ต่างจากคนที่ไม่ซื้ออย่างไร?\n4. คู่แข่งที่ขาย floral ice cream ได้ผล communicate รสชาติอย่างไร?\n5. สร้าง Audio Overview สรุปสถานการณ์ดอกไม้ไทย สำหรับ brief ทีม 5 นาที"}]}
+  ]}
+];
+
+const allLabs=D.flatMap(s=>s.labs);
+let curId=null;
+const visited=new Set();
+
+function renderCur(){
+  document.getElementById('cur').innerHTML=D.map(s=>`
+    <div class="section">
+      <div class="sechdr"><div class="secbar" style="background:${s.color}"></div><span class="seclbl">${s.grp}</span></div>
+      <div class="lgrid">${s.labs.map(l=>`
+        <div class="lc ${visited.has(l.id)?'vis':''} ${l.isDemo?'demo-lab':''}" onclick="openLab('${l.id}')">
+          <div class="lcn">${l.num}</div><div class="lct">${l.title}</div><div class="lcd">${l.desc}</div>
+        </div>`).join('')}
+      </div>
+    </div>`).join('');
+}
+
+function openLab(id){
+  const lab=allLabs.find(l=>l.id===id);
+  if(!lab)return;
+  curId=id;visited.add(id);
+  document.getElementById('landing').style.display='none';
+  document.getElementById('ldetail').style.display='block';
+  const idx=allLabs.findIndex(l=>l.id===id);
+  document.getElementById('nc').style.display='flex';
+  document.getElementById('nl').textContent=lab.num+' · '+lab.title;
+  const np=document.getElementById('np'),nn=document.getElementById('nn');
+  np.disabled=idx===0;
+  np.textContent=idx>0?'← '+allLabs[idx-1].num:'← Prev';
+  if(idx===allLabs.length-1){nn.textContent='เสร็จแล้ว ✓';nn.onclick=goHome;}
+  else{nn.textContent=allLabs[idx+1].num+' →';nn.onclick=()=>navL(1);}
+  document.getElementById('dbadge').textContent=lab.tag;
+  document.getElementById('dtitle').textContent=lab.title;
+  document.getElementById('dobj').textContent=lab.obj;
+  document.getElementById('dprob').textContent=lab.prob;
+  const ddemo=document.getElementById('ddemo');
+  if(lab.demoNote){ddemo.innerHTML='<div class="demo-box"><div class="demo-box-lbl">วิธีใช้</div><div class="demo-box-txt">'+lab.demoNote+'</div></div>';ddemo.style.display='block';}
+  else ddemo.style.display='none';
+  const fwEl=document.getElementById('dfw');
+  if(lab.fw){
+    document.getElementById('dfw-pills').innerHTML=lab.fw.map(f=>'<div class="fw-pill" style="background:'+f.bg+';border:1px solid '+f.color+'30"><div class="fw-letter" style="color:'+f.color+'">'+f.letter+'</div><div class="fw-word" style="color:'+f.color+'">'+f.word+'</div><div class="fw-desc" style="color:'+f.color+'">'+f.desc+'</div></div>').join('');
+    fwEl.style.display='block';
+  } else fwEl.style.display='none';
+  document.getElementById('dsteps').innerHTML=lab.steps.map((s,i)=>'<div class="step"><div class="snum">'+(i+1)+'</div><div class="stxt">'+s+'</div></div>').join('');
+  const extra=document.getElementById('dextra');
+  if(lab.isVideoLab){
+    extra.innerHTML='<div style="margin-top:18px"><div class="sh">สินค้าที่เปิดตัว</div><div class="product-card"><div class="product-name">Triple Floral Coconut — Limited Launch</div><div class="ing-row"><div class="ing"><div class="ing-dot" style="background:#d4a843"></div><div class="ing-lbl">กะทิ · ฐานหลัก</div></div><div class="ing"><div class="ing-dot" style="background:#8a9c7a"></div><div class="ing-lbl">มะลิ · กลิ่นหอม</div></div><div class="ing"><div class="ing-dot" style="background:#e8829a"></div><div class="ing-lbl">กุหลาบมอญ · เนื้อสัมผัส</div></div><div class="ing"><div class="ing-dot" style="background:#e8b84b"></div><div class="ing-lbl">ดาวเรือง · สีและกลิ่น</div></div></div></div><div class="sh">Shot sequence — 30 วินาที</div><div class="seq-block">'+[{ts:"0:00–0:05",dot:"#d4a843",shot:"Coconut Hook",cam:"overhead · slow motion"},{ts:"0:05–0:10",dot:"#8a9c7a",shot:"Jasmine Float",cam:"macro · slow motion"},{ts:"0:10–0:16",dot:"#e8829a",shot:"Rose Fold",cam:"medium close-up"},{ts:"0:16–0:21",dot:"#e8b84b",shot:"Marigold Rain",cam:"overhead · slow motion"},{ts:"0:21–0:28",dot:"#8b5cf6",shot:"Hero Reveal",cam:"slow dolly-in · logo"},{ts:"0:28–0:30",dot:"#94a3b8",shot:"End Card",cam:"fade to white"},].map(r=>'<div class="seq-row"><div class="seq-ts">'+r.ts+'</div><div class="seq-dot" style="background:'+r.dot+'"></div><div class="seq-info"><div class="seq-shot">'+r.shot+'</div><div class="seq-cam">'+r.cam+'</div></div></div>').join('')+'</div><div class="plat-row"><div class="plat"><div class="plat-l">Format</div><div class="plat-v">9:16 vertical</div></div><div class="plat"><div class="plat-l">ความยาว</div><div class="plat-v">30 วินาที</div></div><div class="plat"><div class="plat-l">Platform</div><div class="plat-v">Instagram Reels</div></div><div class="plat"><div class="plat-l">Mood</div><div class="plat-v">Artisan · Warm</div></div></div></div>';
+  } else extra.innerHTML='';
+  let sbHtml='<div class="sblbl">Prompts</div>';
+  if(lab.hasUpload){
+    sbHtml+='<div class="upload-box"><div class="upload-label">'+lab.uploadLabel+'</div><div class="upload-list">'+lab.uploadFiles.map(f=>'<div class="upload-item"><div class="upload-item-dot"></div><div class="upload-item-name">'+f+'</div></div>').join('')+'</div></div>';
+  }
+  lab.prompts.forEach((p,i)=>{
+    if(p.isDivider)sbHtml+='<div class="divlbl">รับผลลัพธ์แล้ว — ทำต่อ</div>';
+    const isDemo=p.isDemo;
+    sbHtml+='<div class="'+(isDemo?'pbox-demo':'pbox')+'"><div class="pstep '+(p.isDivider?'pstep-w':'')+(isDemo?' pstep-demo':'')+'">'+p.step+'</div><div class="plbl">'+p.lbl+'</div><div class="'+(isDemo?'ptxt-demo':'ptxt')+'" id="pt'+i+'">'+escHtml(p.txt)+'</div><button class="'+(isDemo?'bcopy-demo':'bcopy')+'" id="bc'+i+'" onclick="doCopy(\'pt'+i+'\',\'bc'+i+'\')">Copy prompt</button></div>';
+  });
+  if(lab.tip)sbHtml+='<div class="tipbox"><div class="tiplbl">Pro tip</div><div class="tiptxt">'+lab.tip+'</div></div>';
+  document.getElementById('dsb').innerHTML=sbHtml;
+  renderCur();
+}
+
+function escHtml(s){return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+
+function doCopy(eId,bId){
+  const el=document.getElementById(eId),btn=document.getElementById(bId);
+  if(!el||!btn)return;
+  navigator.clipboard.writeText(el.innerText).catch(()=>{});
+  const orig=btn.textContent;
+  btn.textContent='Copied!';btn.classList.add('cp');
+  setTimeout(()=>{btn.textContent=orig;btn.classList.remove('cp');},1800);
+  const t=document.getElementById('toast');
+  t.classList.add('show');setTimeout(()=>t.classList.remove('show'),1800);
+}
+
+function navL(d){const i=allLabs.findIndex(l=>l.id===curId);if(allLabs[i+d])openLab(allLabs[i+d].id);}
+function goHome(){
+  document.getElementById('landing').style.display='block';
+  document.getElementById('ldetail').style.display='none';
+  document.getElementById('nc').style.display='none';
+  renderCur();
+}
+renderCur();
+</script>
+</body>
+</html>
